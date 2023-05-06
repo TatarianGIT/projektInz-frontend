@@ -1,14 +1,13 @@
 import { Link } from "react-router-dom";
+import Logo from "../components/logo";
 
 export const RegisterPage = () => {
   return (
-    <div className="flex justify-center">
-      <div className="flex flex-wrap max-w-7xl">
+    <div className="flex justify-center w-full">
+      <div className="flex flex-wrap max-w-7xl w-full">
         <div className="flex flex-col w-full md:w-1/2">
           <div className="flex justify-center pt-12 md:justify-start md:pl-12 md:-mb-24">
-            <a href="#" className="p-4 text-xl font-bold text-white bg-black">
-              ChatApp.
-            </a>
+            <Logo />
           </div>
           <div className="flex flex-col justify-center px-8 pt-8 my-auto md:justify-start md:pt-0 md:px-24 lg:px-32">
             <p className="text-3xl text-center">Stwórz nowe konto!</p>
