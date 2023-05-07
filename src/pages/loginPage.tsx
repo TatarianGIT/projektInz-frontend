@@ -1,7 +1,28 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../components/logo";
+import Button from "../components/button";
+import { useForm } from "react-hook-form";
+import { LoginFields, login, loginSchema } from "../api/login";
+import { useMutation } from "react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuthStore } from "../store/authStore";
 
 export const LoginPage = () => {
+  const navigate = useNavigate();
+  const { login: storeLogin } = useAuthStore();
+  const { register, handleSubmit } = useForm<LoginFields>({
+    resolver: zodResolver(loginSchema),
+  });
+  const onSubmit = (data: LoginFields) => {
+    mutation.mutateAsync(data);
+  };
+  const mutation = useMutation(login, {
+    async onSuccess(data, variables, context) {
+      storeLogin(data.data.accessToken, data.data.email);
+      navigate("/");
+    },
+  });
+
   return (
     <div className="flex justify-center w-full">
       <div className="flex flex-wrap max-w-7xl w-full">
@@ -14,7 +35,10 @@ export const LoginPage = () => {
             <p className="text-xl text-center">
               Aby czatować, musisz się zalogować!
             </p>
-            <form className="flex flex-col pt-3 md:pt-8">
+            <form
+              className="flex flex-col pt-3 md:pt-8"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <div className="flex flex-col pt-4">
                 <div className="flex relative ">
                   <span className=" inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
@@ -33,6 +57,7 @@ export const LoginPage = () => {
                     id="design-login-email"
                     className=" flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                     placeholder="Email"
+                    {...register("email")}
                   />
                 </div>
               </div>
@@ -54,15 +79,11 @@ export const LoginPage = () => {
                     id="design-login-password"
                     className=" flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                     placeholder="Hasło"
+                    {...register("password")}
                   />
                 </div>
               </div>
-              <button
-                type="submit"
-                className="w-full px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-black shadow-md hover:text-black hover:bg-white focus:outline-none focus:ring-2"
-              >
-                <span className="w-full">Zaluguj się</span>
-              </button>
+              <Button label="Zaloguj się" type="submit" />
             </form>
             <div className="pt-12 pb-12 text-center">
               <p>
