@@ -1,15 +1,15 @@
 import { useAuthStore } from "../store/authStore";
 import axios from "axios";
+import { api } from "./api";
 
 export const setupAxios = () => {
-  axios.interceptors.request.use(
-    (config) => {
+  api.interceptors.request.use(
+    async (config) => {
       const { accessToken } = useAuthStore.getState();
-      if (accessToken) {
-        if (accessToken)
-          // @ts-ignore
-          config.headers!.Authorization = `Bearer ${accessToken}`;
-      }
+      if (accessToken)
+        // @ts-ignore
+        config.headers!.Authorization = `Bearer ${accessToken}`;
+
       if (!config.url) console.error("req.url is not defined");
 
       return config;
@@ -25,6 +25,7 @@ export const setupAxios = () => {
 
         if (response.status === 401) {
           if (!accessToken) {
+            useAuthStore.setState({ accessToken: undefined });
             return Promise.reject(err);
           }
           return Promise.reject(err);

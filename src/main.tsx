@@ -2,12 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { ThemeProvider } from "@material-tailwind/react";
-import { LoginPage } from "./pages/loginPage.tsx";
 import { RegisterPage } from "./pages/registerPage.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { LoginPage } from "./pages/loginPage.tsx";
 import ErrorPage from "./pages/errorPage.tsx";
 import ChatPage from "./pages/chatPage.tsx";
 import { QueryClient, QueryClientProvider } from "react-query";
+import Testy from "./pages/testy.tsx";
+import { setupAxios } from "./api/axios";
 
 const router = createBrowserRouter([
   {
@@ -30,9 +32,18 @@ const router = createBrowserRouter([
     element: <ChatPage />,
     errorElement: <ErrorPage />,
   },
+  {
+    path: "/testy",
+    element: <Testy />,
+    errorElement: <ErrorPage />,
+  },
 ]);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
+
+setupAxios();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
