@@ -97,8 +97,8 @@ export const LoginPage = () => {
         </div>
         <div className="w-1/2 shadow-2xl">
           <img
-            className="hidden object-cover w-full h-screen md:block"
-            src="/images/object/9.jpg"
+            className="hidden object-cover w-full py-32 h-screen md:block"
+            src="/Queue-amico.png"
           />
         </div>
       </div>
