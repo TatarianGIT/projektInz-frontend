@@ -2,6 +2,7 @@ import { z } from "zod";
 import { api } from "./api";
 
 export const registerSchema = z.object({
+  username: z.string(),
   email: z.string().email(),
   password: z.string(),
 });

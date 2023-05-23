@@ -12,6 +12,7 @@ export type LoginResponse = {
   accessToken: string;
   refreshToken: string;
   email: string;
+  username: string;
 };
 
 export const login = (data: LoginFields) =>

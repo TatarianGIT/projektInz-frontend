@@ -1,44 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../components/button";
-import Chat from "../components/chat";
+import Chat from "../chat/chat";
 import Logo from "../components/logo";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
+// import { useSocketIO } from "../hooks/useSocketIO";
 // import { useGetTest } from "../api/test";
 import io from "socket.io-client";
+import UsersList from "../chat/usersList";
 
-const socketEndpoint = "http://localhost:6060";
+const socket = io.connect("http://localhost:6060");
 
 const ChatPage = () => {
-  const { email, logout, accessToken } = useAuthStore();
+  const { username, email, logout, accessToken } = useAuthStore();
   const navigate = useNavigate();
 
-  const [response, setResponse] = useState("No connection with Server! :(");
-  const [socket, setSocket] = useState(null);
-  const connectSocket = () => {
-    const socket = io(socketEndpoint);
+  const [room, setRoom] = useState(null);
 
-    socket.on("connect", () => {
-      setResponse("Connected to the server!");
-    });
-
-    setSocket(socket);
+  const joinRoom = (room) => {
+    socket.emit("joinRoom", { room, email });
   };
 
-  const disconnectSocket = () => {
-    if (socket) {
-      socket.disconnect();
-      setResponse("Disconnected from the server!");
+  socket.on("setRoom", function (room) {
+    setRoom(room);
+  });
+
+  const leaveRoom = (room, email) => {
+    if (room) {
+      socket.emit("leaveRoom", { room, email });
     }
   };
-
-  useEffect(() => {
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, [socket]);
 
   useEffect(() => {
     if (!accessToken) navigate("/login");
@@ -47,23 +38,34 @@ const ChatPage = () => {
   // const xd = useGetTest();
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-screen max-h-screen overflow-scroll ">
       <div className="bg-slate-700 text-cyan-50 grid grid-cols-menu grid-rows-menu h-screen w-screen p-5">
         <div className="border-2">
           <div className="flex justify-center items-center h-full">
             <Logo />
-            {email}
           </div>
         </div>
 
         <div className="border-2">
-          <div className="flex justify-center items-center h-full">
-            <p>Pokój</p>
-            <p>Status: {response}</p>
-            {/* {xd.isLoading && <span className="animate-spin">Ładowanie</span>}
+          {room && (
+            <div className="flex justify-center items-center h-full">
+              <p>Pokój: {room}</p>
+              <button
+                className="border-2 mx-3"
+                onClick={() => {
+                  leaveRoom(room, email);
+                  // setRoom(null);
+                }}
+              >
+                Opuść pokój
+              </button>
+              {/* <p>Status: {socketIO.response}</p> */}
+              {/* <p>Status: {response}</p> */}
+              {/* {xd.isLoading && <span className="animate-spin">Ładowanie</span>}
             {xd.isSuccess && <span>{xd.data.ok}</span>}
             {xd.isError && <span>Błąd!</span>} */}
-          </div>
+            </div>
+          )}
         </div>
 
         <div className="border-2">
@@ -71,6 +73,7 @@ const ChatPage = () => {
             <Button
               label="Wyloguj się"
               onClick={() => {
+                leaveRoom(room, email);
                 logout();
                 navigate("/login");
               }}
@@ -79,24 +82,72 @@ const ChatPage = () => {
         </div>
 
         <div className="border-2">
-          <div className="flex justify-center items-center h-full">
-            <p>Menu</p>
-            <button className="border-2" onClick={connectSocket}>
-              Connect to Server
+          <div className="grid grid-cols-1 gap-3 mt-2 border-b-2 pb-2">
+            <p className="flex justify-center border-b-2 pb-2">Menu</p>
+            <button
+              onClick={() => {
+                if (room) {
+                  leaveRoom(room, email);
+                }
+                joinRoom("General");
+              }}
+            >
+              General
             </button>
-            <button className="border-2" onClick={disconnectSocket}>
-              Disconnect from Server
+            <button
+              onClick={() => {
+                if (room) {
+                  leaveRoom(room, email);
+                }
+                joinRoom("JavaScript");
+              }}
+            >
+              JavaScript
             </button>
+            <button
+              onClick={() => {
+                if (room) {
+                  leaveRoom(room, email);
+                }
+                joinRoom("NodeJS");
+              }}
+            >
+              NodeJS
+            </button>
+            <button
+              onClick={() => {
+                if (room) {
+                  leaveRoom(room, email);
+                }
+                joinRoom("Python");
+              }}
+            >
+              Python
+            </button>
+            <button
+              onClick={() => {
+                if (room) {
+                  leaveRoom(room, email);
+                }
+                joinRoom("Inne");
+              }}
+            >
+              Inne
+            </button>
+          </div>
+          <div className="overflow-x-scroll">
+            <p>Email: {email}</p>
+            <p>Username: {username}</p>
           </div>
         </div>
 
-        <div className="border-2 flex flex-col h-full">
-          <Chat />
+        <div className="border-2 max-h-[calc(100vh-8rem)] w-full relative ">
+          <Chat socket={socket} email={email} room={room} />
         </div>
 
         <div className="border-2">
-          <div className="flex justify-center items-center h-full">
-            <p>Użytkownicy</p>
+          <div className="h-full w-full">
+            <UsersList socket={socket} email={email} room={room} />
           </div>
         </div>
       </div>

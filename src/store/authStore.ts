@@ -10,15 +10,19 @@ export interface IStore {
 const authStore = (set: any) => ({
   accessToken: undefined,
   email: undefined,
-  login: (accessToken: string, email: string) => {
+  username: undefined,
+  login: (accessToken: string, email: string, username: string) => {
     set(() => ({
       accessToken,
       email,
+      username,
     }));
   },
   logout: () => {
     set({
       accessToken: undefined,
+      username: undefined,
+      email: undefined,
     });
   },
   refreshToken: (accessToken: string) => set(() => ({ accessToken })),
