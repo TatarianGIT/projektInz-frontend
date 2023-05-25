@@ -14,7 +14,11 @@ import { AiOutlineMail, AiFillUnlock } from "react-icons/ai";
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<RegisterFields>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFields>({
     resolver: zodResolver(registerSchema),
   });
   const mutation = useMutation(registerMutation, {
@@ -25,6 +29,8 @@ export const RegisterPage = () => {
   const onSubmit = (data: RegisterFields) => {
     mutation.mutate(data);
   };
+
+  const error = Object.entries(errors).length ? Object.entries(errors) : null;
 
   return (
     <div className="flex justify-center w-full">
@@ -67,6 +73,7 @@ export const RegisterPage = () => {
                   />
                 </div>
               </div>
+
               <div className="flex flex-col pt-4 mb-12">
                 <div className="flex relative ">
                   <span className=" inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
@@ -81,11 +88,20 @@ export const RegisterPage = () => {
                   />
                 </div>
               </div>
-              <Button label="Zarejestruj się" type="submit" />
+              {error && (
+                <div className="bg-red-50 text-red-500 p-1 rounded-lg text-center mb-4">
+                  {error?.map((item, index) => (
+                    <div key={index}>{item[1]?.message}</div>
+                  ))}
+                </div>
+              )}
+              <div className="h-full flex items-center justify-center">
+                <Button label="Zarejestruj się" type="submit" />
+              </div>
             </form>
             <div className="pt-12 pb-12 text-center">
               <p>
-                Posiadasz konto?
+                Posiadasz konto? <br />
                 <Link to="/login" className="font-semibold underline ml-2">
                   Zaloguj się tutaj!
                 </Link>
@@ -94,7 +110,7 @@ export const RegisterPage = () => {
           </div>
         </div>
         <div className="w-1/2 shadow-2xl">
-          <imgAiFillUnlock
+          <img
             className="hidden object-cover w-full h-screen py-20 md:block"
             src="/Queue-amico.png"
           />

@@ -11,7 +11,11 @@ import { AiOutlineMail, AiFillUnlock } from "react-icons/ai";
 export const LoginPage = () => {
   const navigate = useNavigate();
   const { login: storeLogin } = useAuthStore();
-  const { register, handleSubmit } = useForm<LoginFields>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFields>({
     resolver: zodResolver(loginSchema),
   });
   const onSubmit = (data: LoginFields) => {
@@ -24,6 +28,8 @@ export const LoginPage = () => {
     },
   });
 
+  const error = Object.entries(errors).length ? Object.entries(errors) : null;
+
   return (
     <div className="flex justify-center w-full">
       <div className="flex flex-wrap max-w-7xl w-full">
@@ -31,13 +37,15 @@ export const LoginPage = () => {
           <div className="flex justify-center pt-12 md:justify-start md:pl-12 md:-mb-24">
             <Logo />
           </div>
+
           <div className="flex flex-col justify-center px-8 pt-8 my-auto md:justify-start md:pt-0 md:px-24 lg:px-32">
             <p className="text-3xl text-center">Witaj.</p>
             <p className="text-xl text-center">
               Aby czatować, musisz się zalogować!
             </p>
+
             <form
-              className="flex flex-col pt-3 md:pt-8"
+              className="flex flex-col justify-center pt-3 md:pt-8"
               onSubmit={handleSubmit(onSubmit)}
             >
               <div className="flex flex-col pt-4">
@@ -68,11 +76,20 @@ export const LoginPage = () => {
                   />
                 </div>
               </div>
-              <Button label="Zaloguj się" type="submit" />
+              {error && (
+                <div className="bg-red-50 text-red-500 p-1 rounded-lg text-center mb-4">
+                  {error?.map((item, index) => (
+                    <div key={index}>{item[1]?.message}</div>
+                  ))}
+                </div>
+              )}
+              <div className="h-full flex items-center justify-center">
+                <Button label="Zaloguj się" type="submit" />
+              </div>
             </form>
             <div className="pt-12 pb-12 text-center">
               <p>
-                Nie posiadasz jeszcze konta?
+                Nie posiadasz jeszcze konta? <br />
                 <Link to="/register" className="font-semibold underline ml-2">
                   Zarejestruj się tutaj!
                 </Link>

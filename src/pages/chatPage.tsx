@@ -18,16 +18,16 @@ const ChatPage = () => {
   const [room, setRoom] = useState(null);
 
   const joinRoom = (room) => {
-    socket.emit("joinRoom", { room, email });
+    socket.emit("joinRoom", { room, username });
   };
 
   socket.on("setRoom", function (room) {
     setRoom(room);
   });
 
-  const leaveRoom = (room, email) => {
+  const leaveRoom = (room, username) => {
     if (room) {
-      socket.emit("leaveRoom", { room, email });
+      socket.emit("leaveRoom", { room, username });
     }
   };
 
@@ -38,8 +38,8 @@ const ChatPage = () => {
   // const xd = useGetTest();
 
   return (
-    <div className="w-full h-screen max-h-screen overflow-scroll ">
-      <div className="bg-slate-700 text-cyan-50 grid grid-cols-menu grid-rows-menu h-screen w-screen p-5">
+    <div className="w-full h-screen overflow-scroll flex justify-center">
+      <div className="bg-slate-700 text-cyan-50 grid grid-cols-menu grid-rows-menu max-h-screen h-full w-full max-w-[1400px] min-w-[800px] p-5">
         <div className="border-2">
           <div className="flex justify-center items-center h-full">
             <Logo />
@@ -50,15 +50,6 @@ const ChatPage = () => {
           {room && (
             <div className="flex justify-center items-center h-full">
               <p>Pokój: {room}</p>
-              <button
-                className="border-2 mx-3"
-                onClick={() => {
-                  leaveRoom(room, email);
-                  // setRoom(null);
-                }}
-              >
-                Opuść pokój
-              </button>
               {/* <p>Status: {socketIO.response}</p> */}
               {/* <p>Status: {response}</p> */}
               {/* {xd.isLoading && <span className="animate-spin">Ładowanie</span>}
@@ -73,7 +64,7 @@ const ChatPage = () => {
             <Button
               label="Wyloguj się"
               onClick={() => {
-                leaveRoom(room, email);
+                leaveRoom(room, username);
                 logout();
                 navigate("/login");
               }}
@@ -87,9 +78,11 @@ const ChatPage = () => {
             <button
               onClick={() => {
                 if (room) {
-                  leaveRoom(room, email);
+                  leaveRoom(room, username);
+                  setRoom(null);
                 }
                 joinRoom("General");
+                setRoom("General");
               }}
             >
               General
@@ -97,9 +90,11 @@ const ChatPage = () => {
             <button
               onClick={() => {
                 if (room) {
-                  leaveRoom(room, email);
+                  leaveRoom(room, username);
+                  setRoom(null);
                 }
                 joinRoom("JavaScript");
+                setRoom("JavaScript");
               }}
             >
               JavaScript
@@ -107,9 +102,11 @@ const ChatPage = () => {
             <button
               onClick={() => {
                 if (room) {
-                  leaveRoom(room, email);
+                  leaveRoom(room, username);
+                  setRoom(null);
                 }
                 joinRoom("NodeJS");
+                setRoom("NodeJS");
               }}
             >
               NodeJS
@@ -117,9 +114,11 @@ const ChatPage = () => {
             <button
               onClick={() => {
                 if (room) {
-                  leaveRoom(room, email);
+                  leaveRoom(room, username);
+                  setRoom(null);
                 }
                 joinRoom("Python");
+                setRoom("Python");
               }}
             >
               Python
@@ -127,27 +126,64 @@ const ChatPage = () => {
             <button
               onClick={() => {
                 if (room) {
-                  leaveRoom(room, email);
+                  leaveRoom(room, username);
+                  setRoom(null);
                 }
                 joinRoom("Inne");
+                setRoom("Inne");
               }}
             >
               Inne
             </button>
           </div>
-          <div className="overflow-x-scroll">
-            <p>Email: {email}</p>
-            <p>Username: {username}</p>
+          <div className="pt-2">
+            {room && (
+              <div className="border-b-2 pb-2 h-full w-full flex justify-center">
+                <button
+                  className="border-2 m-1 py-1 w-[65%]"
+                  onClick={() => {
+                    leaveRoom(room, username);
+                    setRoom(null);
+                  }}
+                >
+                  Opuść kanał
+                </button>
+              </div>
+            )}
+            <div className="grid grid-rows-2 gap-2 p-4 ">
+              <p>Email: {email}</p>
+              <p>Username: {username}</p>
+            </div>
           </div>
         </div>
 
-        <div className="border-2 max-h-[calc(100vh-8rem)] w-full relative ">
-          <Chat socket={socket} email={email} room={room} />
-        </div>
+        {room ? (
+          <div className="border-2 max-h-[calc(100vh-7.8rem)] w-full relative ">
+            <Chat
+              socket={socket}
+              room={room}
+              email={email}
+              username={username}
+            />
+          </div>
+        ) : (
+          <div className="border-2 w-full h-full flex items-center justify-center">
+            <p>Dołącz do pokoju ale czatować z innymi użytkownikami.</p>
+          </div>
+        )}
+
+        {/* <div className="border-2 max-h-[calc(100vh-7.8rem)] w-full relative ">
+          <Chat socket={socket} room={room} email={email} username={username} />
+        </div> */}
 
         <div className="border-2">
           <div className="h-full w-full">
-            <UsersList socket={socket} email={email} room={room} />
+            <UsersList
+              socket={socket}
+              room={room}
+              email={email}
+              username={username}
+            />
           </div>
         </div>
       </div>

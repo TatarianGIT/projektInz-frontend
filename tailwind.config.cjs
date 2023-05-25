@@ -10,7 +10,7 @@ module.exports = withMT({
         menu: "10% 1fr",
       },
       gridTemplateColumns: {
-        menu: "25% 1fr 15%",
+        menu: "20% 1fr 20%",
       },
     },
   },

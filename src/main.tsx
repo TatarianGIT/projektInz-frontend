@@ -8,8 +8,9 @@ import { LoginPage } from "./pages/loginPage.tsx";
 import ErrorPage from "./pages/errorPage.tsx";
 import ChatPage from "./pages/chatPage.tsx";
 import { QueryClient, QueryClientProvider } from "react-query";
-import Testy from "./pages/testy.tsx";
 import { setupAxios } from "./api/axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
@@ -32,15 +33,17 @@ const router = createBrowserRouter([
     element: <ChatPage />,
     errorElement: <ErrorPage />,
   },
-  {
-    path: "/testy",
-    element: <Testy />,
-    errorElement: <ErrorPage />,
-  },
 ]);
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { retry: false } },
+  defaultOptions: {
+    queries: { retry: false },
+    mutations: {
+      onError(error, variables, context) {
+        toast.error(error?.response.data?.message);
+      },
+    },
+  },
 });
 
 setupAxios();
@@ -49,6 +52,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
+        <ToastContainer />
         <RouterProvider router={router} />
       </QueryClientProvider>
     </ThemeProvider>
