@@ -20,7 +20,7 @@ const UsersList = ({ socket, room, email, username }) => {
 
   if (!roomUsers || !roomUsers?.length) return null;
 
-  console.log(roomUsers);
+  // console.log(roomUsers);
   return (
     <div className="w-full flex justify-center flex-col items-center">
       <p className="py-4">Użytkownicy online: [{roomUsers?.length}]</p>
