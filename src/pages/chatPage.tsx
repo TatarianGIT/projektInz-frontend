@@ -172,10 +172,6 @@ const ChatPage = () => {
           </div>
         )}
 
-        {/* <div className="border-2 max-h-[calc(100vh-7.8rem)] w-full relative ">
-          <Chat socket={socket} room={room} email={email} username={username} />
-        </div> */}
-
         <div className="border-2">
           <div className="h-full w-full">
             <UsersList
