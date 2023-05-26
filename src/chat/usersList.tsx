@@ -22,13 +22,13 @@ const UsersList = ({ socket, room, email, username }) => {
 
   return (
     <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-gray-200">
-      <span className="text-base text-gray-700">
+      <span className="text-base text-gray-700 text-center">
         Użytkownicy online {`[${roomUsers?.length ?? 0}]`}
       </span>
-      <div className="flex flex-col gap-2">
+      <div className="flex lg:flex-col lg:gap-2 gap-3 px-4">
         {roomUsers?.map((item, index) => (
           <div className="flex items-center gap-3" key={index}>
-            <div className="bg-gray-200 rounded-md relative">
+            <div className="bg-gray-200 dark:bg-darkTextSecondaryColor rounded-md relative">
               <img
                 src={`https://api.dicebear.com/6.x/miniavs/svg?seed=${item?.username}`}
                 alt="Avatar"
@@ -36,7 +36,7 @@ const UsersList = ({ socket, room, email, username }) => {
               />
               <div className="bg-green-500 w-3 h-3 rounded-full absolute -right-1 -bottom-1"></div>
             </div>
-            <span className="text-lg font-semibold text-gray-900 leading-tight">
+            <span className="text-lg font-semibold text-textPrimaryColor dark:text-darkTextPrimaryColor leading-tight">
               {item?.username}
             </span>
           </div>

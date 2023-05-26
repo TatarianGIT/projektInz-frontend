@@ -32,7 +32,6 @@ const Messages = ({ socket, email, room, username }) => {
     });
 
     socket.on("getLastMessages", function (messages) {
-      console.log("MESSAGES:", messages);
       if (messages) {
         setMessagesReceived([...messages]);
       }
@@ -44,8 +43,6 @@ const Messages = ({ socket, email, room, username }) => {
 
     return () => socket.off("receiveMessage");
   }, [socket]);
-
-  console.log("messagesReceived", messagesReceived);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView();
@@ -83,7 +80,7 @@ const Messages = ({ socket, email, room, username }) => {
               <div className={`flex items-start gap-4 ml-auto`} key={index}>
                 <div className="flex flex-col">
                   <div
-                    className={`text-white flex flex-col bg-secondary py-3 px-6 text-base break-words max-w-[14rem] lg:max-w-[30rem] ${
+                    className={`text-white flex flex-col bg-secondary text-center py-3 px-6 text-base break-words max-w-[14rem] lg:max-w-[30rem] ${
                       item?.message?.length > 100
                         ? "rounded-2xl"
                         : "rounded-full"

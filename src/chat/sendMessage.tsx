@@ -29,7 +29,7 @@ const SendMessage = ({ socket, email, room, username }) => {
         value={message}
         type="text"
         placeholder="Napisz swoją wiadomość!"
-        className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-6 bg-gray-200 rounded-md py-3 pr-32 text-lg"
+        className="w-full focus:outline-none dark:bg-dark focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-6 bg-gray-200 rounded-md py-3 pr-32 text-lg"
       />
       <button
         type="submit"
