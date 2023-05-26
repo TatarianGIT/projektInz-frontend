@@ -20,31 +20,28 @@ const UsersList = ({ socket, room, email, username }) => {
 
   if (!roomUsers || !roomUsers?.length) return null;
 
-  // console.log(roomUsers);
   return (
-    <div className="w-full flex justify-center flex-col items-center">
-      <p className="py-4">Użytkownicy online: [{roomUsers?.length}]</p>
-      <ul className="w-full flex items-center flex-col gap-2">
-        {roomUsers.map((user) => (
-          <li
-            key={user.id}
-            className={`${
-              user.username == username
-                ? "text-green-400 flex w-full"
-                : "text-gray-200 w-full"
-            }`}
-          >
-            {user.username == username ? (
-              <div className="flex gap-1 w-full justify-center font-bold">
-                <ImUser size={21} />
-                {user.username}
-              </div>
-            ) : (
-              <div className="flex w-full justify-center">{user.username}</div>
-            )}
-          </li>
+    <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-gray-200">
+      <span className="text-base text-gray-700">
+        Użytkownicy online {`[${roomUsers?.length ?? 0}]`}
+      </span>
+      <div className="flex flex-col gap-2">
+        {roomUsers?.map((item, index) => (
+          <div className="flex items-center gap-3" key={index}>
+            <div className="bg-gray-200 rounded-md relative">
+              <img
+                src={`https://api.dicebear.com/6.x/miniavs/svg?seed=${item?.username}`}
+                alt="Avatar"
+                className="w-10 h-10"
+              />
+              <div className="bg-green-500 w-3 h-3 rounded-full absolute -right-1 -bottom-1"></div>
+            </div>
+            <span className="text-lg font-semibold text-gray-900 leading-tight">
+              {item?.username}
+            </span>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

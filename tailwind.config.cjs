@@ -3,6 +3,7 @@ import withMT from "@material-tailwind/react/utils/withMT";
 // const withMT = require("@material-tailwind/react/utils/withMT");
 
 module.exports = withMT({
+  darkmode: "media",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -11,6 +12,10 @@ module.exports = withMT({
       },
       gridTemplateColumns: {
         menu: "20% 1fr 20%",
+      },
+      colors: {
+        primary: "#FFA429",
+        secondary: "#18D39E",
       },
     },
   },

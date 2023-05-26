@@ -4,10 +4,10 @@ import Chat from "../chat/chat";
 import Logo from "../components/logo";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
-// import { useSocketIO } from "../hooks/useSocketIO";
-// import { useGetTest } from "../api/test";
 import io from "socket.io-client";
 import UsersList from "../chat/usersList";
+import { TbDoorExit } from "react-icons/tb";
+import { FiLogOut } from "react-icons/fi";
 
 const socket = io.connect("http://localhost:6060");
 
@@ -15,7 +15,7 @@ const ChatPage = () => {
   const { username, email, logout, accessToken } = useAuthStore();
   const navigate = useNavigate();
 
-  const [room, setRoom] = useState(null);
+  const [room, setRoom] = useState<string | null>(null);
 
   const joinRoom = (room) => {
     socket.emit("joinRoom", { room, username });
@@ -35,151 +35,101 @@ const ChatPage = () => {
     if (!accessToken) navigate("/login");
   });
 
-  // const xd = useGetTest();
-
   return (
-    <div className="w-full h-screen overflow-scroll flex justify-center">
-      <div className="bg-slate-700 text-cyan-50 grid grid-cols-menu grid-rows-menu max-h-screen h-full w-full max-w-[1400px] min-w-[800px] p-5">
-        <div className="border-2">
-          <div className="flex justify-center items-center h-full">
-            <Logo />
-          </div>
-        </div>
-
-        <div className="border-2">
-          {room && (
-            <div className="flex justify-center items-center h-full">
-              <p>Pokój: {room}</p>
-              {/* <p>Status: {socketIO.response}</p> */}
-              {/* <p>Status: {response}</p> */}
-              {/* {xd.isLoading && <span className="animate-spin">Ładowanie</span>}
-            {xd.isSuccess && <span>{xd.data.ok}</span>}
-            {xd.isError && <span>Błąd!</span>} */}
+    <div className="lg:w-screen lg:h-screen bg-white dark:bg-green-800">
+      <div className="lg:max-w-screen-2xl mx-auto w-full flex flex-col lg:h-[55rem]">
+        <header className="flex justify-between items-center p-4">
+          <span className="text-primary font-extrabold text-3xl">AppChat.</span>
+          <div className="flex items-center gap-3">
+            <div className="bg-gray-200 rounded-md overflow-hidden">
+              <img
+                src={`https://api.dicebear.com/6.x/miniavs/svg?seed=${username}`}
+                alt="Avatar"
+                className="w-12 h-12"
+              />
             </div>
-          )}
-        </div>
-
-        <div className="border-2">
-          <div className="flex justify-center items-center h-full">
-            <Button
-              label="Wyloguj się"
+            <div className="flex flex-col text-black">
+              <span className="text-xl font-semibold text-gray-900 leading-tight">
+                {username}
+              </span>
+              <span className="text-sm text-gray-500 leading-tight">
+                {email}
+              </span>
+            </div>
+            <button
+              className="text-gray-500 hover:text-gray-700 transition ml-2"
               onClick={() => {
                 leaveRoom(room, username);
                 logout();
                 navigate("/login");
               }}
-            />
-          </div>
-        </div>
-
-        <div className="border-2">
-          <div className="grid grid-cols-1 gap-3 mt-2 border-b-2 pb-2">
-            <p className="flex justify-center border-b-2 pb-2">Menu</p>
-            <button
-              onClick={() => {
-                if (room) {
-                  leaveRoom(room, username);
-                  setRoom(null);
-                }
-                joinRoom("General");
-                setRoom("General");
-              }}
             >
-              General
-            </button>
-            <button
-              onClick={() => {
-                if (room) {
-                  leaveRoom(room, username);
-                  setRoom(null);
-                }
-                joinRoom("JavaScript");
-                setRoom("JavaScript");
-              }}
-            >
-              JavaScript
-            </button>
-            <button
-              onClick={() => {
-                if (room) {
-                  leaveRoom(room, username);
-                  setRoom(null);
-                }
-                joinRoom("NodeJS");
-                setRoom("NodeJS");
-              }}
-            >
-              NodeJS
-            </button>
-            <button
-              onClick={() => {
-                if (room) {
-                  leaveRoom(room, username);
-                  setRoom(null);
-                }
-                joinRoom("Python");
-                setRoom("Python");
-              }}
-            >
-              Python
-            </button>
-            <button
-              onClick={() => {
-                if (room) {
-                  leaveRoom(room, username);
-                  setRoom(null);
-                }
-                joinRoom("Inne");
-                setRoom("Inne");
-              }}
-            >
-              Inne
+              <FiLogOut size={20} />
             </button>
           </div>
-          <div className="pt-2">
-            {room && (
-              <div className="border-b-2 pb-2 h-full w-full flex justify-center">
+        </header>
+        <div className="grid lg:grid-cols-4 px-4 pb-4 gap-4 h-full">
+          <div className="flex flex-col gap-2">
+            <span className="text-base text-gray-700">Kanały</span>
+            {["General", "JavaScript", "NodeJS", "Python", "Inne"]?.map(
+              (item) => (
                 <button
-                  className="border-2 m-1 py-1 w-[65%]"
+                  type="button"
+                  key={item}
                   onClick={() => {
-                    leaveRoom(room, username);
-                    setRoom(null);
+                    if (room) {
+                      leaveRoom(room, username);
+                      setRoom(null);
+                    }
+                    joinRoom(item);
+                    setRoom(item);
                   }}
+                  className={`${
+                    room === item
+                      ? "bg-primary text-white"
+                      : "text-black hover:bg-primary hover:text-white"
+                  } border-2 transition border-primary rounded-full px-2 py-1.5 text-lg`}
+                  disabled={!!room}
                 >
-                  Opuść kanał
+                  {item}
                 </button>
-              </div>
+              )
             )}
-            <div className="grid grid-rows-2 gap-2 p-4 ">
-              <p>Email: {email}</p>
-              <p>Username: {username}</p>
-            </div>
-          </div>
-        </div>
-
-        {room ? (
-          <div className="border-2 max-h-[calc(100vh-7.8rem)] w-full relative ">
-            <Chat
-              socket={socket}
-              room={room}
-              email={email}
-              username={username}
-            />
-          </div>
-        ) : (
-          <div className="border-2 w-full h-full flex items-center justify-center">
-            <p>Dołącz do pokoju ale czatować z innymi użytkownikami.</p>
-          </div>
-        )}
-
-        <div className="border-2">
-          <div className="h-full w-full">
+            {!!room && (
+              <button
+                type="button"
+                onClick={() => {
+                  leaveRoom(room, username);
+                  setRoom(null);
+                }}
+                className={`flex items-center gap-2 text-gray-600 hover:text-red-500 transition mt-4`}
+              >
+                <div className="shrink-0 grow-0">
+                  <TbDoorExit size={22} />
+                </div>
+                <span className="font-bold text-base">Opuść pokój</span>
+              </button>
+            )}
             <UsersList
               socket={socket}
               room={room}
               email={email}
               username={username}
             />
+          </div>
+          <div className="lg:col-span-3 flex flex-col p-2 lg:p-4 pt-8 h-full">
+            {room ? (
+              <Chat
+                socket={socket}
+                room={room}
+                email={email}
+                username={username}
+              />
+            ) : (
+              <div className="py-16 text-black flex justify-center items-center dark:bg-red-600">
+                Dołącz do pokoju ale czatować z innymi użytkownikami.
+              </div>
+            )}
           </div>
         </div>
       </div>

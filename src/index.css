@@ -23,3 +23,8 @@
   -ms-overflow-style: "none";
   scrollbar-width: "none";
 }
+
+body {
+  font-family: "Nunito";
+  font-size: 22px;
+}
