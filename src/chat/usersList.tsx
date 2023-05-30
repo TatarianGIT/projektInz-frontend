@@ -20,6 +20,8 @@ const UsersList = ({ socket, room, email, username }) => {
 
   if (!roomUsers || !roomUsers?.length) return null;
 
+  console.log(roomUsers);
+
   return (
     <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-gray-200">
       <span className="text-base text-gray-700 text-center">

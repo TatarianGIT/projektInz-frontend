@@ -54,13 +54,13 @@ const Messages = ({ socket, email, room, username }) => {
   }
 
   return (
-    <div className="h-full overflow-y-scroll lg:max-h-[45rem] flex flex-col gap-6 pb-6 lg:px-2">
+    <div className="h-full overflow-y-scroll lg:max-h-[45rem] max-h-[25rem] border-t border-gray-200 flex flex-col gap-6 pb-6 lg:px-2 lg:mb-0 mb-10">
       {messagesReceived &&
         messagesReceived?.map((item, index) => {
           if (!item?.username) {
             return (
               <div
-                className="text-gray-800 text-center self-center text-base px-8 py-2 bg-gray-200 rounded-full font-medium"
+                className="text-gray-800 text-center self-center text-base px-8 py-2 bg-gray-200 dark:bg-darkTextSecondaryColor dark:text-white rounded-full font-medium"
                 key={index}
               >
                 {item?.message}
@@ -80,7 +80,7 @@ const Messages = ({ socket, email, room, username }) => {
               <div className={`flex items-start gap-4 ml-auto`} key={index}>
                 <div className="flex flex-col">
                   <div
-                    className={`text-white flex flex-col bg-secondary text-center py-3 px-6 text-base break-words max-w-[14rem] lg:max-w-[30rem] ${
+                    className={`text-white dark:text-black flex flex-col bg-secondary text-center py-3 px-6 text-base break-words max-w-[14rem] lg:max-w-[30rem] ${
                       item?.message?.length > 100
                         ? "rounded-2xl"
                         : "rounded-full"
@@ -92,7 +92,7 @@ const Messages = ({ socket, email, room, username }) => {
                     {humanizedDuration}
                   </div>
                 </div>
-                <div className="bg-gray-200 rounded-full overflow-hidden grow-0 shrink-0">
+                <div className="bg-gray-200 dark:bg-darkTextSecondaryColor rounded-full overflow-hidden grow-0 shrink-0">
                   <img
                     src={`https://api.dicebear.com/6.x/miniavs/svg?seed=${item?.username}`}
                     alt="Avatar"
@@ -105,7 +105,7 @@ const Messages = ({ socket, email, room, username }) => {
 
           return (
             <div className={`flex items-start gap-4`} key={index}>
-              <div className="bg-gray-200 rounded-full overflow-hidden mt-5 grow-0 shrink-0">
+              <div className="bg-gray-200 dark:bg-darkTextSecondaryColor rounded-full overflow-hidden mt-5 grow-0 shrink-0">
                 <img
                   src={`https://api.dicebear.com/6.x/miniavs/svg?seed=${item?.username}`}
                   alt="Avatar"
@@ -117,7 +117,7 @@ const Messages = ({ socket, email, room, username }) => {
                   {item?.username}
                 </span>
                 <div
-                  className={`text-gray-700 flex flex-col bg-gray-100 py-3 px-6 text-base break-words max-w-[14rem] lg:max-w-[30rem] ${
+                  className={`flex flex-col text-center text-gray-700 dark:bg-green-900 bg-gray-100 dark:text-white py-3 px-6 text-base break-words max-w-[14rem] lg:max-w-[30rem] ${
                     item?.message?.length > 100 ? "rounded-2xl" : "rounded-full"
                   }`}
                 >

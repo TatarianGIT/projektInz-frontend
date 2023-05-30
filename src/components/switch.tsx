@@ -24,7 +24,7 @@ const Switch = () => {
           checked={darkMode}
           onChange={toggleDarkMode}
         ></input>
-        <span className="ml-3 font-medium text-gray-900 dark:text-gray-300 dark:border-darkTextSecondaryColor border-primary text-orange-900 flex items-center gap-2 border-2 w-10 h-10 justify-center rounded-3xl">
+        <span className="font-medium  dark:text-gray-300 dark:border-darkTextSecondaryColor border-primary text-orange-900 flex items-center gap-2 border-2 w-10 h-10 justify-center rounded-3xl">
           {colorTheme === "light" ? (
             <>
               <MdDarkMode />
